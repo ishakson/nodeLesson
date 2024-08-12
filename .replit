@@ -1,0 +1,13 @@
+modules = ["web", "nodejs-20"]
+run = "live-server"
+
+[nix]
+channel = "stable-24_05"
+
+[deployment]
+run = ["sh", "-c", "live-server"]
+
+[[ports]]
+localPort = 8000
+externalPort = 80
+exposeLocalhost = true
