@@ -28,14 +28,33 @@ const getDogPic = async () => {
   try{
   const data = await readFilePro(`${__dirname}/dog.txt`);
   console.log(`Breed: ${data}`)
-  const response = await superagent.get(`https://dog.ceo/api/breed/${data}/images/random`);
-  console.log(response.body.message);
- await  writeFilePro(`${__dirname}/dog-img.txt`, response.body.message);
+  const res1 =  superagent.get(`https://dog.ceo/api/breed/${data}/images/random`);
+    const res2 =  superagent.get(`https://dog.ceo/api/breed/${data}/images/random`);
+
+    const all = await Promise.all([res1, res2]);
+    
+  const imgs = all.map(res => res.body.message);
+ await  writeFilePro(`${__dirname}/dog-img.txt`, imgs.join('\n'));
   console.log("File written");
+  }catch(err){
+  
+    throw err;
+  }
+  return "done";
+}
+
+(async () => {
+  try{
+    await getDogPic().then(data => console.log(data));
   }catch(err){
     console.log(err);
   }
-  
-}
-
-getDogPic()
+})()
+/*
+getDogPic().then(x => {
+  console.log(x);
+  console.log("finished")
+}).catch(err => {
+  console.log("error");
+})
+*/
